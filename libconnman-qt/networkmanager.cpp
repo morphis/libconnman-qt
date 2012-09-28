@@ -288,6 +288,11 @@ NetworkTechnology* NetworkManager::getTechnology(const QString &type) const
     }
 }
 
+QList<NetworkTechnology*> NetworkManager::listTechnologies() const
+{
+    return m_technologiesCache.values();
+}
+
 const QVector<NetworkService*> NetworkManager::getServices() const
 {
     QVector<NetworkService*> networks(m_servicesCache.size(), NULL);
