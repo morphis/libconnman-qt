@@ -28,8 +28,7 @@ class NetworkingModel : public QObject
     Q_OBJECT;
 
     Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged);
-    Q_PROPERTY(bool wifiPowered READ isWifiPowered WRITE setWifiPowered NOTIFY wifiPoweredChanged);
-    Q_PROPERTY(QList<QObject*> networks READ networks NOTIFY networksChanged);
+    Q_PROPERTY(QList<NetworkService*> services READ services NOTIFY networksChanged);
 
 public:
     NetworkingModel(QObject* parent=0);
@@ -37,19 +36,16 @@ public:
 
     bool isAvailable() const;
 
-    QList<QObject*> networks() const;
-    bool isWifiPowered() const;
+    QList<NetworkService*> services() const;
     void requestUserInput(ServiceReqData* data);
     void reportError(const QString &error);
 
 public slots:
-    void setWifiPowered(const bool &wifiPowered);
     void requestScan() const;
     void sendUserReply(const QVariantMap &input);
 
 signals:
     void availabilityChanged(bool available);
-    void wifiPoweredChanged(const bool &wifiPowered);
     void networksChanged();
     void technologiesChanged();
     void userInputRequested(QVariantMap fields);
@@ -57,7 +53,6 @@ signals:
 
 private:
     NetworkManager* m_manager;
-    NetworkTechnology* m_wifi;
     ServiceReqData* m_req_data;
 
 private slots:

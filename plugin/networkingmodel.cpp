@@ -15,19 +15,11 @@
 
 NetworkingModel::NetworkingModel(QObject* parent)
   : QObject(parent),
-    m_manager(NULL),
-    m_wifi(NULL)
+    m_manager(NULL)
 {
     m_manager = NetworkManagerFactory::createInstance();
     new UserInputAgent(this);
 
-    m_wifi = m_manager->getTechnology("wifi"); // TODO: use constant literal
-    if (m_wifi) {
-        connect(m_wifi,
-                SIGNAL(poweredChanged(bool)),
-                this,
-                SIGNAL(wifiPoweredChanged(bool)));
-    }
     connect(m_manager, SIGNAL(availabilityChanged(bool)),
             this, SLOT(managerAvailabilityChanged(bool)));
     connect(m_manager,
@@ -52,60 +44,20 @@ bool NetworkingModel::isAvailable() const
     return m_manager->isAvailable();
 }
 
-QList<QObject*> NetworkingModel::networks() const
+QList<NetworkService*> NetworkingModel::services() const
 {
-    const QString wifi("wifi");
-    QList<QObject*> networks;
+    QList<NetworkService*> services;
+    
     // TODO: get rid of double looping, do filtering in NM::getServices()
-    foreach (NetworkService* network, m_manager->getServices()) {
-        if (network->type() == wifi) {
-            networks.append(network);
-        }
-    }
-    return networks;
-}
-
-bool NetworkingModel::isWifiPowered() const
-{
-    if (m_wifi) {
-        return m_wifi->powered();
-    } else {
-        qWarning() << "Can't get: wifi technology is NULL";
-        return false;
-    }
-}
-
-void NetworkingModel::setWifiPowered(const bool &wifiPowered)
-{
-    if (m_wifi) {
-        m_wifi->setPowered(wifiPowered);
-    } else {
-        qWarning() << "Can't set: wifi technology is NULL";
-    }
-}
-
-void NetworkingModel::requestScan() const
-{
-    qDebug() << "scan requested for wifi";
-    if (m_wifi) {
-        m_wifi->scan();
-    }
+    foreach (NetworkService* service, m_manager->getServices())
+        services.append(service);
+    
+    return services;
 }
 
 void NetworkingModel::updateTechnologies(const QMap<QString, NetworkTechnology*> &added,
                                          const QStringList &removed)
 {
-    QString wifi_str = QString("wifi");
-    if (added.contains(wifi_str)) {
-        m_wifi = added.value(wifi_str);
-        connect(m_wifi,
-                SIGNAL(poweredChanged(bool)),
-                this,
-                SIGNAL(wifiPoweredChanged(bool)));
-    }
-    if (removed.contains(wifi_str)) {
-        m_wifi = NULL; // FIXME: is it needed?
-    }
     emit technologiesChanged();
 }
 
