@@ -104,6 +104,10 @@ const QVariantMap NetworkService::proxyConfig() const {
     return qdbus_cast<QVariantMap>(m_propertiesCache.value(ProxyConfig));
 }
 
+const QString NetworkService::dbusPath() const {
+    return m_service->path();
+}
+
 void NetworkService::requestConnect()
 {
     // increase reply timeout when connecting

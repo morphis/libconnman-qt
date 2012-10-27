@@ -56,6 +56,8 @@ public:
     const QVariantMap proxy() const;
     const QVariantMap proxyConfig() const;
 
+    const QString dbusPath() const;
+
 signals:
     void nameChanged(const QString &name);
     void stateChanged(const QString &state);
