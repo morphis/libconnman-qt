@@ -24,7 +24,7 @@ NetworkTechnology::NetworkTechnology(const QString &path, const QVariantMap &pro
 
     if (!m_technology->isValid()) {
         qDebug() << "invalid technology: " << path;
-        throw -1; // FIXME
+        exit(1); // FIXME
     }
 
     m_propertiesCache = properties;

@@ -35,7 +35,7 @@ NetworkService::NetworkService(const QString &path, const QVariantMap &propertie
 
     if (!m_service->isValid()) {
         qDebug() << "invalid service: " << path;
-        throw -1; // FIXME
+        exit(1); // FIXME
     }
 
     m_propertiesCache = properties;
