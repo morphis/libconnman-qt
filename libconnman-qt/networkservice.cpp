@@ -132,6 +132,11 @@ void NetworkService::requestDisconnect()
     m_service->Disconnect();
 }
 
+void NetworkService::requestRemove()
+{
+    m_service->Remove();
+}
+
 void NetworkService::setIpv4Config(const QVariantMap &ipv4)
 {
     // QDBusPendingReply<void> reply =

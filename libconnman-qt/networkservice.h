@@ -76,6 +76,7 @@ signals:
 public slots:
     void requestConnect();
     void requestDisconnect();
+    void requestRemove();
 
     void setIpv4Config(const QVariantMap &ipv4);
     void setNameserversConfig(const QStringList &nameservers);
