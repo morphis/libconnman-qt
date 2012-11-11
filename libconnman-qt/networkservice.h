@@ -35,6 +35,7 @@ class NetworkService : public QObject
     Q_PROPERTY(QStringList domainsConfig READ domainsConfig WRITE setDomainsConfig NOTIFY domainsConfigChanged);
     Q_PROPERTY(QVariantMap proxy READ proxy NOTIFY proxyChanged);
     Q_PROPERTY(QVariantMap proxyConfig READ proxyConfig WRITE setProxyConfig NOTIFY proxyConfigChanged);
+    Q_PROPERTY(bool autoConnect READ autoConnect WRITE setAutoConnect NOTIFY autoConnectChanged);
 
 public:
     NetworkService(const QString &path, const QVariantMap &properties, QObject* parent);
@@ -55,6 +56,7 @@ public:
     const QStringList domainsConfig() const;
     const QVariantMap proxy() const;
     const QVariantMap proxyConfig() const;
+    const bool autoConnect() const;
 
     const QString dbusPath() const;
 
@@ -72,6 +74,7 @@ signals:
     void domainsConfigChanged(const QStringList &domains);
     void proxyChanged(const QVariantMap &proxy);
     void proxyConfigChanged(const QVariantMap &proxy);
+    void autoConnectChanged(const bool autoConnect);
 
 public slots:
     void requestConnect();
@@ -82,6 +85,7 @@ public slots:
     void setNameserversConfig(const QStringList &nameservers);
     void setDomainsConfig(const QStringList &domains);
     void setProxyConfig(const QVariantMap &proxy);
+    void setAutoConnect(const bool autoconnect);
 
 private:
     Service *m_service;
@@ -104,6 +108,7 @@ private:
     static const QString DomainsConfig;
     static const QString Proxy;
     static const QString ProxyConfig;
+    static const QString AutoConnect;
 
 private slots:
     void propertyChanged(const QString &name, const QDBusVariant &value);

@@ -25,6 +25,7 @@ const QString NetworkService::Domains("Domains");
 const QString NetworkService::DomainsConfig("Domains.Configuration");
 const QString NetworkService::Proxy("Proxy");
 const QString NetworkService::ProxyConfig("Proxy.Configuration");
+const QString NetworkService::AutoConnect("AutoConnect");
 
 NetworkService::NetworkService(const QString &path, const QVariantMap &properties, QObject* parent)
   : QObject(parent),
@@ -104,6 +105,10 @@ const QVariantMap NetworkService::proxyConfig() const {
     return qdbus_cast<QVariantMap>(m_propertiesCache.value(ProxyConfig));
 }
 
+const bool NetworkService::autoConnect() const {
+    return m_propertiesCache.value(AutoConnect).toBool();
+}
+
 const QString NetworkService::dbusPath() const {
     return m_service->path();
 }
@@ -159,6 +164,11 @@ void NetworkService::setProxyConfig(const QVariantMap &proxy)
 {
     // QDBusPendingReply<void> reply =
     m_service->SetProperty(ProxyConfig, QDBusVariant(QVariant(proxy)));
+}
+
+void NetworkService::setAutoConnect(const bool autoConnect)
+{
+    m_service->SetProperty(AutoConnect, QDBusVariant(QVariant(autoConnect)));
 }
 
 /* this slot is used for debugging */
