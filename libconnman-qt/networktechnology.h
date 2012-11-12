@@ -35,14 +35,17 @@ public:
 public slots:
     void setPowered(const bool &powered);
     void scan();
+    void requestScan();
 
 signals:
     void poweredChanged(const bool &powered);
     void connectedChanged(const bool &connected);
+    void scanFinished();
 
 private:
     Technology *m_technology;
     QVariantMap m_propertiesCache;
+    QDBusPendingCallWatcher *m_scanWatcher;
 
     static const QString Name;
     static const QString Type;
@@ -51,6 +54,7 @@ private:
 
 private slots:
     void propertyChanged(const QString &name, const QDBusVariant &value);
+    void scanReply(QDBusPendingCallWatcher *call);
 
 private:
     Q_DISABLE_COPY(NetworkTechnology);

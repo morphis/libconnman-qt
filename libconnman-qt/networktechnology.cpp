@@ -61,6 +61,13 @@ const bool NetworkTechnology::connected() const
     return m_propertiesCache[NetworkTechnology::Connected].toBool();
 }
 
+void NetworkTechnology::requestScan()
+{
+    QDBusPendingReply<> reply = m_technology->Scan();
+    m_scanWatcher = new QDBusPendingCallWatcher(reply, m_technology);
+    connect(m_scanWatcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(scanReply(QDBusPendingCallWatcher*)));
+}
+
 // Setters
 
 void NetworkTechnology::setPowered(const bool &powered)
@@ -87,4 +94,9 @@ void NetworkTechnology::propertyChanged(const QString &name, const QDBusVariant 
     } else if (name == Connected) {
         emit connectedChanged(m_propertiesCache[name].toBool());
     }
+}
+
+void NetworkTechnology::scanReply(QDBusPendingCallWatcher *call)
+{
+    emit scanFinished();
 }
